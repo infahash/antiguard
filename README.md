@@ -7,7 +7,7 @@
 
 ### About
 If you are working on a smali project, this tool will help you to fix class-package conflicts.
-think of a derectory structure like below.
+think of a directory structure like below.
 
 <p align="center">
   <img src="https://github.com/infahash/antiguard/blob/master/asset/directory%20structure.PNG" />
