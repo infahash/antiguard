@@ -13,7 +13,7 @@ think of a derectory structure like below.
   <img src="https://github.com/infahash/antiguard/blob/master/asset/directory%20structure.PNG" />
 </p>
 
-in this example if you need to addess class `a` in package a/a/a/a, you can do it without errors.
+in this example if you need to access class `a` in package a/a/a/a, you can do it without errors.
 
 But what happen if you need to access class `d` in package a/a/a/a/a. It will show error on java code because `package a` in a/a/a/a package conflicts with `class a` in a/a/a/a. 
 
