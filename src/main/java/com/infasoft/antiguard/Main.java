@@ -26,7 +26,7 @@ public class Main {
 
         /* Check working directory exists. if not exit. */
         if (srcFolder.exists ()){
-            makeLog ("Working on " + srcFolder.getParent ());
+            makeLog ("Working on : " + srcFolder.getParent ());
             workingDir = new File (srcFolder.getParent ());
         } else {
             makeErr ("Directory doesn't exists!");
