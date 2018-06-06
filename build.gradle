@@ -1,4 +1,4 @@
-version '1.0-SNAPSHOT'
+version '1.0'
 
 apply plugin: 'java'
 
@@ -7,11 +7,11 @@ jar {
         attributes("Manifest-Version": "1.0",
                 "Main-Class": "com.infasoft.antiguard.Main")
     }
+    archivesBaseName = "antiguard"
 }
 
 task fatJar(type: Jar) {
     manifest.from jar.manifest
-    classifier = 'all'
     from {
         configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
     } {

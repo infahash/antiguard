@@ -20,7 +20,7 @@ public class Main {
     private static ArrayList<String> renamedPaths = new ArrayList<> ();
     private static ArrayList<File> smaliFiles = new ArrayList<> ();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         srcFolder = new File (args[0]).getAbsoluteFile ();
 
@@ -29,7 +29,7 @@ public class Main {
             makeLog ("Working on " + srcFolder.getParent ());
             workingDir = new File (srcFolder.getParent ());
         } else {
-            makeLog ("Directory doesn't exists!");
+            makeErr ("Directory doesn't exists!");
             System.exit (1);
         }
 
@@ -45,16 +45,7 @@ public class Main {
 
         doWork (srcFolder);
 
-        makeLog ("Package complication success!");
-        makeLog ("Collecting changed paths...");
-
-//        for (int i=0; i<renamedPaths.size(); i++) {
-//            String s = renamedPaths.get(i);
-//            s = s.replace("\\", "/");
-//            renamedPaths.add(i, s);
-//            makeLog(s);
-//        }
-
+        makeLog ("Package rename task success!");
         makeLog ("Starting source change...");
         makeLog ("This task will take more time...");
 
@@ -177,10 +168,10 @@ public class Main {
 
                 if (FileUtils.getFile (f.getParentFile (), f.getName () + ".smali").exists ()) {
 
-                    makeLog ("Fixing conflict for package " +
+                    makeLog ("Fixing conflicts for package " +
                             f.getAbsolutePath ().replace (srcFolder.getAbsolutePath () + "\\", ""));
 
-                    boolean renameTask = f.renameTo (new File (f.getParentFile (),"pkg_" + f.getName ()));
+                    f.renameTo (new File (f.getParentFile (),"pkg_" + f.getName ()));
                     String renamedPkg = FileUtils.getFile (f.getParentFile (), f.getName ())
                             .getAbsolutePath ().replace (srcFolder.getAbsolutePath () + "\\", "")
                             .replace("\\", "/");
