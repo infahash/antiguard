@@ -3,6 +3,8 @@
 # antiguard
 **Fix class and package conflicts when reverse engineer an apk that obfuscated with proguard.**
 
+----------------
+
 ### About
 If you are working on a smali project, this tool will help you to fix class-package conflicts.
 think of a derectory structure like below.
