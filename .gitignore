@@ -1,0 +1,13 @@
+
+# IntelliJ project files
+.gradle
+
+.idea
+
+build
+
+out
+
+smali
+
+smali_*
