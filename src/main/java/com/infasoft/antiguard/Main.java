@@ -35,18 +35,16 @@ public class Main {
 
         makeLog ("Creating backup directory...");
 
-        if (FileUtils.getFile (workingDir, srcFolder.getName () + "_AG").exists ()) {
+        if (FileUtils.getFile (workingDir, srcFolder.getName () + "_BACKUP").exists ()) {
             makeLog ("Skipping... Backup folder already exists.");
-            srcFolder = new File (srcFolder + "_AG");
-
         } else {
             createBackupFolder ();
         }
 
-        doWork (srcFolder);
+        analyzeConflicts(srcFolder);
 
         makeLog ("Package rename task success!");
-        makeLog ("Starting source change...");
+        makeLog ("Start changing " + smaliFiles.size() + " source files...");
         makeLog ("This task will take more time...");
 
         float totalFiles = Float.parseFloat(String.valueOf(smaliFiles.size()));
@@ -56,17 +54,17 @@ public class Main {
             fixFile (f);
             completedFiles++;
             float percent = (completedFiles/totalFiles) * 100;
-            makeLog ("\t\t\t\t||||| " + String.valueOf(percent).substring(0, String.valueOf(percent).lastIndexOf(".")) + "% |||||");
+            if (percent%10==0)makeLog ("\t\t\t\t||||| " + String.valueOf(percent).substring(0, String.valueOf(percent).lastIndexOf(".")) + "% |||||");
         }
+
+        makeLog("\nclass-package conflicts fixed successfully.");
+        makeLog("Original files available on " + srcFolder.getName() + "_BACKUP folder");
 
     }
 
     private static void fixFile(File smali){
 
         int replacements = 0;
-
-        makeLog ("Changing source file " +
-                smali.getAbsolutePath ().replace (srcFolder.getAbsolutePath () + "\\", ""));
 
         StringBuilder fileContent = new StringBuilder ();
         BufferedReader reader = null;
@@ -91,6 +89,7 @@ public class Main {
                             }
                         }
                         currReadLine = currReadLine.replace("L" + s + "/", out);
+                        replacements++;
                     }
                 }
                 fileContent.append (currReadLine).append (System.lineSeparator ());
@@ -105,8 +104,6 @@ public class Main {
             e.printStackTrace ();
 
         } finally {
-            makeLog ("- Task completed. " + replacements + " replacements made on " + smali.getName ());
-
             try {
                 if (reader != null) {
                     reader.close();
@@ -117,6 +114,11 @@ public class Main {
             } catch (IOException e) {
                 makeErr (e.getMessage ());
             }
+
+            if (replacements>0){
+                String fileRelPathText = smali.getAbsolutePath ().replace (srcFolder.getAbsolutePath () + "\\", "");
+                makeLog ("Fixed " + replacements + " path mappings on : " + fileRelPathText);
+            }
         }
 
     }
@@ -125,12 +127,10 @@ public class Main {
         try {
             FileUtils.copyDirectory (
                     srcFolder, /* Source*/
-                    FileUtils.getFile (workingDir, srcFolder.getName () + "_AG")
+                    FileUtils.getFile (workingDir, srcFolder.getName () + "_BACKUP")
             );
 
             makeLog ("Backup directory creation success");
-            makeLog ("Moving to new work directory...");
-            srcFolder = new File (srcFolder + "_AG");
 
         } catch (IOException e) {
             makeErr ("Could't create backup for directory");
@@ -140,7 +140,7 @@ public class Main {
     }
 
 
-    private static void doWork (File src) {
+    private static void analyzeConflicts (File src) {
 
         makeLog ("Analyzing " + src.getAbsolutePath ());
 
